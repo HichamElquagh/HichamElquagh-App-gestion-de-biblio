@@ -1,22 +1,26 @@
 package BD;
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class Cdb {
 
+    public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            // Register the JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-        public static void main()
-        {
-            Connection connection = null;
-            try {
-                // below two lines are used for connectivity.
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/gestion_biblio",
-                        "root", "");
-                System.out.println("Connection Success");
-            } catch (Exception e) {
-                System.out.println("Connection Failed");
-            }
-        } // function ends
-} // class ends
-
-
+            // Establish a connection to the database
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/gestion_biblio",
+                    "root", "");
+            System.out.println("Connection Success");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            System.out.println("Connection Failed");
+        }
+        return connection;
+    }
+}
