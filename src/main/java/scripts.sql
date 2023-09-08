@@ -58,3 +58,12 @@ DELIMITER ;
 
 
 
+
+// Create a Book object
+        Book book = new Book();
+        book.setIsbn(isbn);
+        book.setTitle(title);
+        book.setAvailableQuantity(available);
+        book.setTotalQuantity(total);
+        book.setMissingQuantity(0);
+// for adding author

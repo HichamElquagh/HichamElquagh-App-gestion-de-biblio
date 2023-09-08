@@ -2,6 +2,10 @@ package mainApp;
 
 import Class.Book; // Import the Book class
 import Class.Author;
+import Class.Brrower;
+import Class.Brrowed;
+
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class libraryApp {
@@ -17,8 +21,11 @@ public class libraryApp {
             System.out.println("1. Add Book");
             System.out.println("2. Edit Book");
             System.out.println("3. Remove Book");
-            System.out.println("4. Display All Books");
-            System.out.println("5. Exit");
+            System.out.println("4. Search by Title");
+            System.out.println("5. Search by Author");
+            System.out.println("6. Display All Books");
+            System.out.println("7. Borrow a Book");
+            System.out.println("8. Exit");
             System.out.print("Enter choice: ");
 
             switch (ui.nextInt()) {
@@ -32,11 +39,16 @@ public class libraryApp {
                     DeleteBookmain();
                     break;
                 case 4:
-                    // Call the displayAllBooks method
+                    SearchByTitlemain();
                     break;
                 case 5:
-                    System.out.println("Leaving the program now...");
-                    System.exit(0);
+
+                    break;
+                case 6:
+                    DisplayAllboksmain();
+                    break;
+                case 7:
+                    BrrowAbookmain();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -60,20 +72,26 @@ public class libraryApp {
         System.out.print(" enter total quantity : ");
         int total = scanner.nextInt();
 
+        Author author1 = new Author();
+        author1.setName(author);
+        author1.authorBookid();
         // Create a Book object
         Book book = new Book();
-        // Set the book properties
         book.setIsbn(isbn);
         book.setTitle(title);
-         // Assuming you have an Author class with an ID
+        book.setAuthorId(author1);
         book.setAvailableQuantity(available);
         book.setTotalQuantity(total);
         book.setMissingQuantity(0);
-        //Author author1 = new Author();
-        //author1.setName(author);
-        // Call the addBook method to insert the book into the database
         book.addBook();
-        System.out.println("Book added successfully.");
+// for adding author
+
+
+
+
+
+
+
     }
     public static void EditBookmainmain(){
             Scanner scanner = new Scanner(System.in);
@@ -152,6 +170,67 @@ public class libraryApp {
         // Set the book properties
         book.setIsbn(isbn);
         book.deleteBook();
+
+
+    }
+    public static void SearchByTitlemain() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print(" Search By title: ");
+        // Consume the newline character
+        String Title = scanner.nextLine();
+        Book book = new Book();
+        // Set the book properties
+        book.searchBookByTitle(Title);
+
+    }
+    public static void DisplayAllboksmain(){
+        Scanner scanner = new Scanner(System.in);
+        Book book = new Book();
+        // Set the book properties
+        book.displayAvailableBooks();
+
+    }
+
+    public static void BrrowAbookmain(){
+        Scanner scanner = new Scanner(System.in);
+        Brrower brrower = new Brrower();
+        System.out.print(" ----------- record the information of the Brrower ----------- ");
+        System.out.print(" Please Enter CIN for brrower : ");
+        String  cin_brrower = scanner.nextLine();
+        brrower.setCin(cin_brrower);
+        int  ifone = brrower.checkCinBrrower();
+        if(ifone == 1){
+            System.out.print(" Please Enter Isbn for book  : ");
+            int  Isbn_book = scanner.nextInt();
+            Book book = new Book();
+            book.setIsbn(Isbn_book);
+            int isone = book.getIsbnBook();
+            String title = book.getTitle();
+            if (isone == 1 ){
+                Brrowed brrowed = new Brrowed();
+                brrowed.setBrrower_id(brrower);
+                brrowed.setIsbn_book (book);
+                brrowed.borrowBook();
+            }
+
+
+
+
+        }else {
+
+            System.out.print(" Please Enter Full name for brrower : ");
+            String  brrower_name = scanner.nextLine();
+            brrower.setName_empr(brrower_name);
+            brrower.register();
+            brrower.getId();
+            System.out.print(" Please Enter Isbn for book  : ");
+            String  book_isbn = scanner.nextLine();
+
+
+
+
+        }
+
 
 
 

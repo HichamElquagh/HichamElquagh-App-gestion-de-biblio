@@ -2,10 +2,7 @@ package Class;
 
 import BD.Cdb;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Book {
     private int isbn;
@@ -67,7 +64,27 @@ public class Book {
 
 
 
+    public int getIsbnBook(){
+        String sql = "SELECT title FROM book WHERE isbn = ? " ;
 
+        try (Connection connection = Cdb.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, isbn);
+
+            try (ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    String Titlebook = result.getString("title");
+                    this.setTitle(Titlebook);
+                    return 1 ;
+                }
+            }
+        } catch (SQLException e) {
+            // Handle any database-related exceptions here
+        }
+
+return -1;
+
+    }
     public void addBook() {
         String sql = "INSERT INTO book (isbn , title, author_id, available_quantity, total_quantity, missing_quantity) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -75,7 +92,7 @@ public class Book {
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, isbn);
             preparedStatement.setString(2, title);
-            preparedStatement.setInt(3, 1);
+            preparedStatement.setInt(3, author.getId());
             preparedStatement.setInt(4, availableQuantity);
             preparedStatement.setInt(5, totalQuantity);
             preparedStatement.setInt(6, missingQuantity);
@@ -133,11 +150,54 @@ public class Book {
         }
     }
 
-    public Book searchBook() {
-        return null;
+
+    public void searchBookByTitle(String title){
+
+        String sql = "SELECT * FROM book WHERE title LIKE ?";
+
+        try (Connection connection = Cdb.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, "%" + title + "%");
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    System.out.println("Book found:");
+                    System.out.println("ISBN: " + resultSet.getInt("isbn"));
+                    System.out.println("Title: " + resultSet.getString("title"));
+                    System.out.println("Available Quantity " + resultSet.getInt("available_quantity"));
+                    System.out.println("Total Quantity  : " + resultSet.getInt("total_quantity"));
+                    System.out.println("Missing Quantity  " + resultSet.getInt("missing_quantity"));
+                    // Display other book properties as needed
+                    System.out.println();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to search for books by title.");
+        }
     }
 
+
+
     public void displayAvailableBooks() {
+        String sql = "SELECT * FROM book ";
+
+        try (Connection connection = Cdb.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    System.out.println("Book found:");
+                    System.out.println("ISBN: " + resultSet.getInt("isbn"));
+                    System.out.println("Title: " + resultSet.getString("title"));
+                    System.out.println("Available Quantity " + resultSet.getInt("available_quantity"));
+                    System.out.println("Total Quantity  : " + resultSet.getInt("total_quantity"));
+                    System.out.println("Missing Quantity  " + resultSet.getInt("missing_quantity"));
+                    // Display other book properties as needed
+                    System.out.println();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to search for books by title.");
+        }
     }
 
     public void displayBorrowedBooks() {

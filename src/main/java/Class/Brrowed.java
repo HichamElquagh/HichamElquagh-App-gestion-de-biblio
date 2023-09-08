@@ -1,8 +1,15 @@
 package Class;
 
-import java.util.Date;
+import BD.Cdb;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Calendar;
 public class Brrowed {
+
+
  private int id ;
  private Book book;
  private Brrower  brrower;
@@ -61,7 +68,37 @@ public class Brrowed {
  }
 
 
+ public void borrowBook() {
+  String sql = "INSERT INTO borrowed (isbn_book, brrower_id, start_date, end_date, status_book) VALUES (?, ?, ?, ?, ?)";
+
+  try (Connection connection = Cdb.getConnection();
+   PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+   Date currentDate = new Date();
+   // Calculate the end date as current date + 8 days
+   Calendar calendar = Calendar.getInstance();
+   calendar.setTime(currentDate);
+   calendar.add(Calendar.DAY_OF_YEAR, 8);
+   Date endDate = calendar.getTime();
+   // Set ISBN and Borrower ID
+   preparedStatement.setInt(1, book.getIsbn());
+   preparedStatement.setInt(2, brrower.getId());
+
+   preparedStatement.setDate(3, new java.sql.Date(currentDate.getTime())); // Set start date
+   preparedStatement.setDate(4, new java.sql.Date(endDate.getTime())); // Set end date
+
+   // Set status_book
+   preparedStatement.setString(5, "brrowed");
+
+   int rowsInserted = preparedStatement.executeUpdate();
+   if (rowsInserted > 0) {
+    System.out.println("Book borrowed successfully.");
+   }
+  } catch (SQLException e) {
+   System.out.println("Failed to borrow the book.");
+  }
  }
+ }
+
 
 
 
