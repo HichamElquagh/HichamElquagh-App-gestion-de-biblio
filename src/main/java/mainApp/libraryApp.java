@@ -25,7 +25,8 @@ public class libraryApp {
             System.out.println("5. Search by Author");
             System.out.println("6. Display All Books");
             System.out.println("7. Borrow a Book");
-            System.out.println("8. Exit");
+            System.out.println("8. Retrieve a Book");
+            System.out.println("9. Exit");
             System.out.print("Enter choice: ");
 
             switch (ui.nextInt()) {
@@ -49,6 +50,9 @@ public class libraryApp {
                     break;
                 case 7:
                     BrrowAbookmain();
+                    break;
+                case 8:
+                    RetrieveAbookmain();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -194,45 +198,36 @@ public class libraryApp {
     public static void BrrowAbookmain(){
         Scanner scanner = new Scanner(System.in);
         Brrower brrower = new Brrower();
-        System.out.print(" ----------- record the information of the Brrower ----------- ");
-        System.out.print(" Please Enter CIN for brrower : ");
+        System.out.println(" ----------- record the information of the Brrower ----------- ");
+        System.out.println(" Please Enter CIN for brrower : ");
         String  cin_brrower = scanner.nextLine();
         brrower.setCin(cin_brrower);
         int  ifone = brrower.checkCinBrrower();
         if(ifone == 1){
-            System.out.print(" Please Enter Isbn for book  : ");
-            int  Isbn_book = scanner.nextInt();
-            Book book = new Book();
-            book.setIsbn(Isbn_book);
-            int isone = book.getIsbnBook();
-            String title = book.getTitle();
-            if (isone == 1 ){
-                Brrowed brrowed = new Brrowed();
-                brrowed.setBrrower_id(brrower);
-                brrowed.setIsbn_book (book);
-                brrowed.borrowBook();
+            Brrowed brrowed = new Brrowed();
+            brrowed.setBrrower_id(brrower);
+            brrowed.borrowBook();
             }
+        else {
 
-
-
-
-        }else {
-
-            System.out.print(" Please Enter Full name for brrower : ");
+            System.out.println(" Please Enter Full name for brrower : ");
             String  brrower_name = scanner.nextLine();
             brrower.setName_empr(brrower_name);
             brrower.register();
             brrower.getId();
-            System.out.print(" Please Enter Isbn for book  : ");
-            String  book_isbn = scanner.nextLine();
-
+            Brrowed brrowed = new Brrowed();
+            brrowed.setBrrower_id(brrower);
+            brrowed.borrowBook();
 
 
 
         }
 
+    }
+    public static void RetrieveAbookmain(){
 
-
+        Brrowed brrowed = new Brrowed();
+        brrowed.RetrieveAbook();
 
     }
 }

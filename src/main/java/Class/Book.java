@@ -83,7 +83,6 @@ public class Book {
         }
 
 return -1;
-
     }
     public void addBook() {
         String sql = "INSERT INTO book (isbn , title, author_id, available_quantity, total_quantity, missing_quantity) VALUES (?, ?, ?, ?, ?, ?)";
